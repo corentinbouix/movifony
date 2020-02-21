@@ -14,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @author Corentin Bouix <cbouix@clever-age.com>
  */
-class Movie
+class ImdbMovie implements MovieInterface
 {
     /**
      * @var int

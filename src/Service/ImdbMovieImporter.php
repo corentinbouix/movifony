@@ -5,7 +5,10 @@ declare(strict_types=1);
 namespace Movifony\Service;
 
 use Movifony\DTO\MovieDto;
-use Movifony\Entity\Movie;
+use Movifony\Entity\ImdbMovie;
+use Movifony\Entity\MovieInterface;
+use Movifony\Factory\ImbdFactory;
+use Movifony\Factory\ImbMovieFactory;
 
 /**
  * Class ImdbMovieImporter
@@ -14,18 +17,27 @@ use Movifony\Entity\Movie;
  */
 class ImdbMovieImporter implements ImporterInterface
 {
-
-    public function import(Movie $movie): bool
+    /**
+     * @inheritDoc
+     */
+    public function read(array $data): MovieDto
     {
-
+        return new MovieDto($data['title']);
     }
 
-    public function process(MovieDto $movieDto) {
-        // appeler la Movie factory
-        // récuperer un Movie créé depuis le MovieDTO donné par factory
+    /**
+     * @inheritDoc
+     */
+    public function process(MovieDto $movieDto): MovieInterface
+    {
+        return ImbdFactory::createMovie($movieDto);
     }
 
-    public function read(array $movie) {
-
+    /**
+     * @inheritDoc
+     */
+    public function import(ImdbMovie $movie): bool
+    {
+        // TODO: Implement import() method.
     }
 }
