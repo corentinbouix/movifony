@@ -57,4 +57,9 @@ class ImdbMovieImporter implements ImporterInterface
 
         return true;
     }
+
+    public function clear(): void
+    {
+        $this->managerRegistry->getManager()->clear();
+    }
 }

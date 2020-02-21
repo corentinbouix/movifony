@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace Movifony\Command;
 
+use League\Csv\MapIterator;
 use League\Csv\Reader;
 use League\Csv\Exception;
 use Movifony\Service\ImdbMovieImporter;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -22,6 +24,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 class ImdbMovieImportCommand extends Command
 {
     protected const MOVIE_FILENAME = 'title.akas.tsv';
+    protected const BATCH_SIZE = 1000;
 
     protected static $defaultName = 'movifony:import:movies:imdb';
 
@@ -56,16 +59,38 @@ class ImdbMovieImportCommand extends Command
         $csv->setHeaderOffset(0);
         $csv->setDelimiter("\t");
 
+        /** @var MapIterator $records */
         $records = $csv->getRecords();
 
-        foreach ($records as $record) {
-            $movieDto = $this->imdbImporter->read($record);
-            $movie = $this->imdbImporter->process($movieDto);
-            $state = $this->imdbImporter->import($movie);
+        $progressBar = new ProgressBar($output, 20000000);
 
-            if (!$state) {
-                $this->logger->warning("Can't import movie with title: {$movie->getTitle()}");
+        $records->rewind();
+
+        while ($records->valid()) {
+
+            for ($i = 0; $i < self::BATCH_SIZE; $i++) {
+                $this->importMovie($records->current());
+
+                $records->next();
+                $progressBar->advance();
             }
+            $this->imdbImporter->clear();
+        }
+
+        $progressBar->finish();
+    }
+
+    /**
+     * @param array $movieData
+     */
+    protected function importMovie(array $movieData): void
+    {
+        $movieDto = $this->imdbImporter->read($movieData);
+        $movie = $this->imdbImporter->process($movieDto);
+        $state = $this->imdbImporter->import($movie);
+
+        if (!$state) {
+            $this->logger->warning("Can't import movie with title: {$movie->getTitle()}");
         }
     }
 
