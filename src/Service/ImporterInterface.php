@@ -18,9 +18,9 @@ interface ImporterInterface
      *
      * @param array $data
      *
-     * @return MovieDto
+     * @return MovieDto|null
      */
-    public function read(array $data): MovieDto;
+    public function read(array $data): ?MovieDto;
 
     /**
      * Transform DTO to a Movie

@@ -26,6 +26,20 @@ class ImdbMovie implements MovieInterface
     protected int $id;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="identifier", type="string")
+     */
+    protected string $identifier;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="title", type="string")
+     */
+    protected string $title;
+
+    /**
      * @return int
      */
     public function getId(): int
@@ -34,11 +48,20 @@ class ImdbMovie implements MovieInterface
     }
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="title", type="string")
+     * @return string
      */
-    protected string $title;
+    public function getIdentifier(): string
+    {
+        return $this->identifier;
+    }
+
+    /**
+     * @param string $identifier
+     */
+    public function setIdentifier(string $identifier): void
+    {
+        $this->identifier = $identifier;
+    }
 
     /**
      * @return string

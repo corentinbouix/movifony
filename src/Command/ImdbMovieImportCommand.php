@@ -86,11 +86,17 @@ class ImdbMovieImportCommand extends Command
     protected function importMovie(array $movieData): void
     {
         $movieDto = $this->imdbImporter->read($movieData);
-        $movie = $this->imdbImporter->process($movieDto);
-        $state = $this->imdbImporter->import($movie);
+        if ($movieDto !== null) {
+            $movie = $this->imdbImporter->process($movieDto);
+            $skipped = !$this->imdbImporter->import($movie);
+        } else {
+            $skipped = true;
+        }
 
-        if (!$state) {
-            $this->logger->warning("Can't import movie with title: {$movie->getTitle()}");
+        if ($skipped) {
+            $this->logger->info("Can't import movie with data:".json_encode($movieData, JSON_THROW_ON_ERROR, 512));
+        } else {
+            $this->logger->info("Successfully add movie with title: {$movie->getTitle()}");
         }
     }
 

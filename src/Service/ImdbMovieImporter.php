@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Movifony\Service;
 
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ObjectManager;
 use Movifony\DTO\MovieDto;
 use Movifony\Entity\ImdbMovie;
 use Movifony\Factory\ImbdFactory;
@@ -29,9 +30,24 @@ class ImdbMovieImporter implements ImporterInterface
     /**
      * @inheritDoc
      */
-    public function read(array $data): MovieDto
+    public function read(array $data): ?MovieDto
     {
-        return new MovieDto($data['title']);
+        $identifier = $data['titleId'];
+        $isOriginalTitle = (bool) $data['isOriginalTitle'];
+
+        $om = $this->getObjectManager();
+        $repo = $om->getRepository(ImdbMovie::class);
+        $result = $repo->findOneBy(
+            [
+                'identifier' => $identifier,
+            ]
+        );
+
+        if ($result !== null || !$isOriginalTitle) {
+            return null;
+        }
+
+        return new MovieDto($identifier, $data['title']);
     }
 
     /**
@@ -47,8 +63,8 @@ class ImdbMovieImporter implements ImporterInterface
      */
     public function import(ImdbMovie $movie): bool
     {
-        $om = $this->managerRegistry->getManagerForClass(ImdbMovie::class);
-        if (!$om) {
+        $om = $this->getObjectManager();
+        if ($om === null) {
             return false;
         }
 
@@ -61,5 +77,10 @@ class ImdbMovieImporter implements ImporterInterface
     public function clear(): void
     {
         $this->managerRegistry->getManager()->clear();
+    }
+
+    protected function getObjectManager(): ?ObjectManager
+    {
+        return $this->managerRegistry->getManagerForClass(ImdbMovie::class);
     }
 }

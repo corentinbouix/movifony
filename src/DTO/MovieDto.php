@@ -11,14 +11,25 @@ namespace Movifony\DTO;
  */
 class MovieDto
 {
+    private string $identifier;
     private string $title;
 
     /**
+     * @param string $identifier
      * @param string $title
      */
-    public function __construct(string $title)
+    public function __construct(string $identifier, string $title)
     {
+        $this->identifier = $identifier;
         $this->title = $title;
+    }
+
+    /**
+     * @return string
+     */
+    public function getIdentifier(): string
+    {
+        return $this->identifier;
     }
 
     /**
