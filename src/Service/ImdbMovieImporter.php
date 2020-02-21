@@ -4,11 +4,10 @@ declare(strict_types=1);
 
 namespace Movifony\Service;
 
+use Doctrine\Persistence\ManagerRegistry;
 use Movifony\DTO\MovieDto;
 use Movifony\Entity\ImdbMovie;
-use Movifony\Entity\MovieInterface;
 use Movifony\Factory\ImbdFactory;
-use Movifony\Factory\ImbMovieFactory;
 
 /**
  * Class ImdbMovieImporter
@@ -17,6 +16,16 @@ use Movifony\Factory\ImbMovieFactory;
  */
 class ImdbMovieImporter implements ImporterInterface
 {
+    protected ManagerRegistry $managerRegistry;
+
+    /**
+     * @param ManagerRegistry $managerRegistry
+     */
+    public function __construct(ManagerRegistry $managerRegistry)
+    {
+        $this->managerRegistry = $managerRegistry;
+    }
+
     /**
      * @inheritDoc
      */
@@ -28,7 +37,7 @@ class ImdbMovieImporter implements ImporterInterface
     /**
      * @inheritDoc
      */
-    public function process(MovieDto $movieDto): MovieInterface
+    public function process(MovieDto $movieDto): ImdbMovie
     {
         return ImbdFactory::createMovie($movieDto);
     }
@@ -38,6 +47,14 @@ class ImdbMovieImporter implements ImporterInterface
      */
     public function import(ImdbMovie $movie): bool
     {
-        // TODO: Implement import() method.
+        $om = $this->managerRegistry->getManagerForClass(ImdbMovie::class);
+        if (!$om) {
+            return false;
+        }
+
+        $om->persist($movie);
+        $om->flush();
+
+        return true;
     }
 }

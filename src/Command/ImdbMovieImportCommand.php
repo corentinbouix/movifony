@@ -51,38 +51,21 @@ class ImdbMovieImportCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): void
     {
-        //load the CSV document from a file path
+        // load the CSV document from a file path
         $csv = Reader::createFromPath($this->getImportFilePath(), 'r');
         $csv->setHeaderOffset(0);
         $csv->setDelimiter("\t");
 
-//        $header = $csv->getHeader(); //returns the CSV header record
         $records = $csv->getRecords();
 
         foreach ($records as $record) {
             $movieDto = $this->imdbImporter->read($record);
-
-
             $movie = $this->imdbImporter->process($movieDto);
-
-            $state = $this->imdbImporter->import();
+            $state = $this->imdbImporter->import($movie);
 
             if (!$state) {
-                $this->logger->emergency('Fausse alerte mdr');
-                // $
+                $this->logger->warning("Can't import movie with title: {$movie->getTitle()}");
             }
-
-            dump($record, $movieDto, $movie);
-
-            // injecter l'importer IMDB via l'injection de dépendances
-            // importer un record
-
-            // read  (array) array => DTO
-            // process () DTO => Movie
-            // Import () => Doctrine ORM
-
-            die();
-            $output->writeln("Processing movie with title: {$record['title']}");
         }
     }
 
