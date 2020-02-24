@@ -59,7 +59,12 @@ class ImdbMovieImporter implements ImporterInterface
      */
     public function process(MovieDto $movieDto): ImdbMovie
     {
-        return ImbdFactory::createMovie($movieDto);
+        $movie = ImbdFactory::createMovie($movieDto);
+
+        $posterUrl = $this->importAsset($movie);
+        $movie->setPosterUrl($posterUrl);
+
+        return $movie;
     }
 
     /**
@@ -82,11 +87,12 @@ class ImdbMovieImporter implements ImporterInterface
 
     /**
      * @param ImdbMovie $movie
+     *
+     * @return string
      */
-    protected function importAsset(ImdbMovie $movie): void
+    protected function importAsset(ImdbMovie $movie): string
     {
-        $assetUrl = $this->assetGetter->getPoster($movie->getIdentifier());
-        dump($assetUrl);
+        return $this->assetGetter->getPoster($movie->getIdentifier());
     }
 
     public function clear(): void
@@ -94,6 +100,9 @@ class ImdbMovieImporter implements ImporterInterface
         $this->managerRegistry->getManager()->clear();
     }
 
+    /**
+     * @return ObjectManager|null
+     */
     protected function getObjectManager(): ?ObjectManager
     {
         return $this->managerRegistry->getManagerForClass(ImdbMovie::class);

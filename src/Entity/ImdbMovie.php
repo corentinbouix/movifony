@@ -40,6 +40,13 @@ class ImdbMovie implements MovieInterface
     protected string $title;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="poster_url", type="string")
+     */
+    protected string $posterUrl;
+
+    /**
      * @return int
      */
     public function getId(): int
@@ -77,5 +84,21 @@ class ImdbMovie implements MovieInterface
     public function setTitle(string $title): void
     {
         $this->title = $title;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPosterUrl(): string
+    {
+        return $this->posterUrl;
+    }
+
+    /**
+     * @param string $posterUrl
+     */
+    public function setPosterUrl(string $posterUrl): void
+    {
+        $this->posterUrl = $posterUrl;
     }
 }
