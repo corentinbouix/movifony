@@ -17,7 +17,11 @@ services:
     # this creates a service per class whose id is the fully-qualified class name
     Movifony\:
         resource: '../src/*'
-        exclude: '../src/{DependencyInjection,Entity,Migrations,Tests,Kernel.php}'
+        exclude: '../src/{DependencyInjection,Entity,DTO,Migrations,Tests,Kernel.php}'
+
+    Movifony\Action\:
+        resource: '../src/Action/*'
+        public: true
 
     # controllers are imported separately to make sure services can be injected
     # as action arguments even if you don't extend any base controller class
