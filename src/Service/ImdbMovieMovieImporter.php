@@ -6,16 +6,18 @@ namespace Movifony\Service;
 
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Persistence\ObjectManager;
+use Movifony\DTO\DtoInterface;
 use Movifony\DTO\MovieDto;
+use Movifony\Entity\BusinessObjectInterface;
 use Movifony\Entity\ImdbMovie;
 use Movifony\Factory\ImbdFactory;
 
 /**
- * Class ImdbMovieImporter
+ * Implement import for IMDB with its own related business logic
  *
  * @author Corentin Bouix <cbouix@clever-age.com>
  */
-class ImdbMovieMovieImporter implements MovieImporterInterface
+class ImdbMovieMovieImporter implements ImporterInterface
 {
     protected ManagerRegistry $managerRegistry;
 
@@ -57,9 +59,9 @@ class ImdbMovieMovieImporter implements MovieImporterInterface
     /**
      * @inheritDoc
      */
-    public function process(MovieDto $movieDto): ImdbMovie
+    public function process(DtoInterface $data): ImdbMovie
     {
-        $movie = ImbdFactory::createMovie($movieDto);
+        $movie = ImbdFactory::createMovie($data);
 
         $this->importAsset($movie);
 
@@ -69,20 +71,21 @@ class ImdbMovieMovieImporter implements MovieImporterInterface
     /**
      * @inheritDoc
      */
-    public function import(ImdbMovie $movie): bool
+    public function write(BusinessObjectInterface $data): bool
     {
         $om = $this->getObjectManager();
         if ($om === null) {
             return false;
         }
 
-        $om->persist($movie);
+        $om->persist($data);
         $om->flush();
 
-        $this->importAsset($movie);
+        $this->importAsset($data);
 
         return true;
     }
+
 
     /**
      * @param ImdbMovie $movie

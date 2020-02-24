@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace Movifony\Factory;
 
 use Movifony\DTO\MovieDto;
+use Movifony\DTO\PersonDto;
 use Movifony\Entity\ImdbMovie;
+use Movifony\Entity\ImdbPerson;
 
 /**
  * Class ImbdMovieFactory
@@ -26,5 +28,19 @@ class ImbdFactory
         $movie->setIdentifier($movieDto->getIdentifier());
 
         return $movie;
+    }
+
+    /**
+     * @param PersonDto $personDto
+     *
+     * @return ImdbPerson
+     */
+    public static function createPerson(PersonDto $personDto): ImdbPerson
+    {
+        $person = new ImdbPerson();
+        $person->setIdentifier($personDto->getIdentifier());
+        $person->setMovie($personDto->getMovieIdentifier());
+
+        return $person;
     }
 }

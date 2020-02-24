@@ -9,7 +9,7 @@ namespace Movifony\DTO;
  *
  * @author Corentin Bouix <cbouix@clever-age.com>
  */
-class MovieDto
+class MovieDto implements DtoInterface
 {
     private string $identifier;
     private string $title;

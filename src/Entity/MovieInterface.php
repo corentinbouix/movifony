@@ -7,7 +7,7 @@ namespace Movifony\Entity;
 /**
  * Interface MovieInterface
  */
-interface MovieInterface
+interface MovieInterface extends BusinessObjectInterface
 {
     /**
      * @return string
