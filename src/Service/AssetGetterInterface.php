@@ -16,7 +16,7 @@ interface AssetGetterInterface
      *
      * @param string $identifier
      *
-     * @return string
+     * @return string|null
      */
-    public function getPoster(string $identifier): string;
+    public function getPoster(string $identifier): ?string;
 }

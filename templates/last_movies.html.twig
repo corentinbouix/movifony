@@ -7,7 +7,8 @@
         {% for movie in movies %}
             <div class="col-2 mb-3">
                 <div class="card">
-                    <img src="{{ movie.posterUrl }}" class="card-img-top" alt="...">
+                    <img src="{{ movie.posterUrl ? movie.posterUrl : 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=750&q=80' }}"
+                         class="card-img-top" alt="...">
                     <div class="card-body">
                         <h5 class="card-title">{{ movie.title }}</h5>
                         <p class="card-text">TBA.</p>

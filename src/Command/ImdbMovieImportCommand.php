@@ -7,7 +7,7 @@ namespace Movifony\Command;
 use League\Csv\MapIterator;
 use League\Csv\Reader;
 use League\Csv\Exception;
-use Movifony\Service\ImdbMovieImporter;
+use Movifony\Service\ImdbMovieMovieImporter;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\ProgressBar;
@@ -30,14 +30,14 @@ class ImdbMovieImportCommand extends Command
 
     protected string $projectDir;
 
-    protected ImdbMovieImporter $imdbImporter;
+    protected ImdbMovieMovieImporter $imdbImporter;
 
     protected LoggerInterface $logger;
 
     public function __construct(
         string $name = null,
         string $projectDir,
-        ImdbMovieImporter $imdbMovieImporter,
+        ImdbMovieMovieImporter $imdbMovieImporter,
         LoggerInterface $logger
     ) {
         parent::__construct($name);

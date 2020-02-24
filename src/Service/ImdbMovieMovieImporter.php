@@ -15,7 +15,7 @@ use Movifony\Factory\ImbdFactory;
  *
  * @author Corentin Bouix <cbouix@clever-age.com>
  */
-class ImdbMovieImporter implements ImporterInterface
+class ImdbMovieMovieImporter implements MovieImporterInterface
 {
     protected ManagerRegistry $managerRegistry;
 
@@ -61,8 +61,7 @@ class ImdbMovieImporter implements ImporterInterface
     {
         $movie = ImbdFactory::createMovie($movieDto);
 
-        $posterUrl = $this->importAsset($movie);
-        $movie->setPosterUrl($posterUrl);
+        $this->importAsset($movie);
 
         return $movie;
     }
@@ -87,12 +86,11 @@ class ImdbMovieImporter implements ImporterInterface
 
     /**
      * @param ImdbMovie $movie
-     *
-     * @return string
      */
-    protected function importAsset(ImdbMovie $movie): string
+    protected function importAsset(ImdbMovie $movie): void
     {
-        return $this->assetGetter->getPoster($movie->getIdentifier());
+        $posterUrl = $this->assetGetter->getPoster($movie->getIdentifier());
+        $movie->setPosterUrl($posterUrl);
     }
 
     public function clear(): void

@@ -37,7 +37,7 @@ class ImdbAssetGetter implements AssetGetterInterface
     /**
      * @inheritDoc
      */
-    public function getPoster(string $identifier): string
+    public function getPoster(string $identifier): ?string
     {
         $pageContent = $this->getPageContent($identifier);
 
@@ -71,7 +71,7 @@ class ImdbAssetGetter implements AssetGetterInterface
      */
     protected function getPageUrlFor(array $parameters): string
     {
-        return implode(
+        $url = implode(
             DIRECTORY_SEPARATOR,
             array_merge(
                 [
@@ -81,6 +81,9 @@ class ImdbAssetGetter implements AssetGetterInterface
                 $parameters
             )
         );
+
+        // Add a trailing slash at the end to avoid 301 redirect from IMDB
+        return $url.DIRECTORY_SEPARATOR;
     }
 
     /**
@@ -88,12 +91,18 @@ class ImdbAssetGetter implements AssetGetterInterface
      *
      * @param string $content
      *
-     * @return string
+     * @return string|null
      */
-    protected function getPosterUrl(string $content): string
+    protected function getPosterUrl(string $content): ?string
     {
         $crawler = new Crawler($content);
 
-        return $crawler->filter(self::IMDB_POSTER_PATH)->attr('src');
+        $posterUrlNode = $crawler->filter(self::IMDB_POSTER_PATH);
+
+        if ($posterUrlNode->count() !== 0) {
+            return $posterUrlNode->attr('src');
+        }
+
+        return null;
     }
 }

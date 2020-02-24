@@ -11,7 +11,7 @@ use Movifony\Entity\MovieInterface;
 /**
  * Define import available logic for movie import
  */
-interface ImporterInterface
+interface MovieImporterInterface
 {
     /**
      * Transfer array data to a DTO
