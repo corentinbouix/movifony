@@ -19,12 +19,16 @@ class ImdbMovieImporter implements ImporterInterface
 {
     protected ManagerRegistry $managerRegistry;
 
+    protected AssetGetterInterface $assetGetter;
+
     /**
-     * @param ManagerRegistry $managerRegistry
+     * @param ManagerRegistry      $managerRegistry
+     * @param AssetGetterInterface $assetGetter
      */
-    public function __construct(ManagerRegistry $managerRegistry)
+    public function __construct(ManagerRegistry $managerRegistry, AssetGetterInterface $assetGetter)
     {
         $this->managerRegistry = $managerRegistry;
+        $this->assetGetter = $assetGetter;
     }
 
     /**
@@ -71,7 +75,18 @@ class ImdbMovieImporter implements ImporterInterface
         $om->persist($movie);
         $om->flush();
 
+        $this->importAsset($movie);
+
         return true;
+    }
+
+    /**
+     * @param ImdbMovie $movie
+     */
+    protected function importAsset(ImdbMovie $movie): void
+    {
+        $assetUrl = $this->assetGetter->getPoster($movie->getIdentifier());
+        dump($assetUrl);
     }
 
     public function clear(): void
