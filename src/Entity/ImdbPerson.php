@@ -33,11 +33,11 @@ class ImdbPerson implements BusinessObjectInterface
     protected string $identifier;
 
     /**
-     * @var ArrayCollection|ImdbMovie[]
+     * @var Collection|ArrayCollection|ImdbMovie[]
      *
      * @ORM\ManyToMany(targetEntity="Movifony\Entity\ImdbMovie", inversedBy="persons")
      */
-    protected ArrayCollection $movies;
+    protected Collection $movies;
 
     public function __construct()
     {

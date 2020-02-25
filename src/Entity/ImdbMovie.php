@@ -49,12 +49,12 @@ class ImdbMovie implements MovieInterface
     protected ?string $posterUrl;
 
     /**
-     * @var ArrayCollection|ImdbPerson[]
+     * @var Collection|ArrayCollection|ImdbPerson[]
      *
      * @ORM\ManyToMany(targetEntity="Movifony\Entity\ImdbPerson", mappedBy="movies")
      * @ORM\JoinTable(name="mf_movie_person")
      */
-    protected ArrayCollection $persons;
+    protected Collection $persons;
 
     public function __construct()
     {
