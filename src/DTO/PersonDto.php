@@ -15,14 +15,14 @@ class PersonDto implements DtoInterface
 
     protected string $movieIdentifier;
 
-    protected bool $needPersist = true;
+    protected bool $needPersist;
 
     /**
      * @param string $identifier
      * @param string $movieIdentifier
      * @param bool   $needPersist
      */
-    public function __construct(string $identifier, string $movieIdentifier, bool $needPersist = true)
+    public function __construct(string $identifier, string $movieIdentifier, bool $needPersist)
     {
         $this->identifier = $identifier;
         $this->movieIdentifier = $movieIdentifier;

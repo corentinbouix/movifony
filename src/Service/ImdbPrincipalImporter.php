@@ -12,6 +12,7 @@ use Movifony\Entity\BusinessObjectInterface;
 use Movifony\Entity\ImdbMovie;
 use Movifony\Entity\ImdbPerson;
 use Movifony\Factory\ImbdFactory;
+use Movifony\Repository\PersonRepository;
 
 /**
  * Class ImdbPrincipalImporter
@@ -35,11 +36,16 @@ class ImdbPrincipalImporter implements ImporterInterface
      */
     public function read(array $data): ?PersonDto
     {
+        $personIdentifier = $data['nconst'];
         if (!$this->isMatchingMovie($data['tconst'])) {
             return null;
         }
 
-        return new PersonDto($data['nconst'], $data['tconst']);
+        /** @var PersonRepository $personRepository */
+        $personRepository = $this->managerRegistry->getRepository(ImdbPerson::class);
+        $existingPerson = $personRepository->findByIdentifier($personIdentifier);
+
+        return new PersonDto($data['nconst'], $data['tconst'], $existingPerson === null);
     }
 
     /**
