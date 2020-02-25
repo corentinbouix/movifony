@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Movifony\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -31,11 +33,16 @@ class ImdbPerson implements BusinessObjectInterface
     protected string $identifier;
 
     /**
-     * @var string
+     * @var ArrayCollection|ImdbMovie[]
      *
-     * @ORM\Column(name="movie", type="string")
+     * @ORM\ManyToMany(targetEntity="Movifony\Entity\ImdbMovie", inversedBy="persons")
      */
-    protected string $movie;
+    protected ArrayCollection $movies;
+
+    public function __construct()
+    {
+        $this->movies = new ArrayCollection();
+    }
 
     /**
      * @return int
@@ -62,18 +69,35 @@ class ImdbPerson implements BusinessObjectInterface
     }
 
     /**
-     * @return string
+     * @return ArrayCollection|ImdbMovie[]
      */
-    public function getMovie(): string
+    public function getMovies(): Collection
     {
-        return $this->movie;
+        return $this->movies;
     }
 
     /**
-     * @param string $movie
+     * @param array|ArrayCollection|ImdbMovie[] $movies
      */
-    public function setMovie(string $movie): void
+    public function setMovies(array $movies): void
     {
-        $this->movie = $movie;
+        $this->movies = $movies;
+    }
+
+    /**
+     * @param ImdbMovie $movie
+     */
+    public function addMovie(ImdbMovie $movie): void
+    {
+        $this->movies->add($movie);
+    }
+
+    /**
+     * @param ImdbMovie $movie
+     *
+     */
+    public function removeMovie(ImdbMovie $movie): void
+    {
+        $this->movies->removeElement($movie);
     }
 }
