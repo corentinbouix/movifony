@@ -36,4 +36,17 @@ class MovieRepository extends ServiceEntityRepository
 
         return $qb->getQuery()->getArrayResult();
     }
+
+    /**
+     * @param string $identifier
+     *
+     * @return ImdbMovie|null
+     */
+    public function findByIdentifier(string $identifier): ?ImdbMovie
+    {
+        /** @var $movie ImdbMovie */
+        $movie = $this->findOneBy(['identifier' => $identifier]);
+
+        return $movie;
+    }
 }

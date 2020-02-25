@@ -35,6 +35,10 @@ class ImdbPrincipalImporter implements ImporterInterface
      */
     public function read(array $data): ?PersonDto
     {
+        if (!$this->isMatchingMovie($data['tconst'])) {
+            return null;
+        }
+
         return new PersonDto($data['nconst'], $data['tconst']);
     }
 
@@ -73,5 +77,18 @@ class ImdbPrincipalImporter implements ImporterInterface
     protected function getObjectManager(): ?ObjectManager
     {
         return $this->managerRegistry->getManagerForClass(ImdbMovie::class);
+    }
+
+    /**
+     * @param $movieIdentifier
+     *
+     * @return bool
+     */
+    protected function isMatchingMovie(string $movieIdentifier): bool
+    {
+        $repository = $this->managerRegistry->getRepository(ImdbMovie::class);
+        $movie = $repository->findByIdentifier($movieIdentifier);
+
+        return $movie !== null;
     }
 }
