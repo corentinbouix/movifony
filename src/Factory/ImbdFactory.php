@@ -32,14 +32,16 @@ class ImbdFactory
 
     /**
      * @param PersonDto $personDto
+     * @param ImdbMovie $movie
      *
      * @return ImdbPerson
      */
-    public static function createPerson(PersonDto $personDto): ImdbPerson
+    public static function createPerson(PersonDto $personDto, ImdbMovie $movie): ImdbPerson
     {
         $person = new ImdbPerson();
         $person->setIdentifier($personDto->getIdentifier());
-        $person->setMovie($personDto->getMovieIdentifier());
+        $person->addMovie($movie);
+        $person->needToBePersisted();
 
         return $person;
     }

@@ -21,7 +21,7 @@ class PersonRepository extends ServiceEntityRepository
     /**
      * @param string $identifier
      *
-     * @return object|null
+     * @return ImdbPerson|null
      */
     public function findByIdentifier(string $identifier): ?ImdbPerson
     {

@@ -95,7 +95,11 @@ abstract class AbstractTsvImportCommand extends Command
         $dtoData = $this->importer->read($data);
         if ($dtoData !== null) {
             $objectData = $this->importer->process($dtoData);
-            $skipped = !$this->importer->write($objectData);
+            if ($objectData === null ) {
+                $skipped = true;
+            } else {
+                $skipped = !$this->importer->write($objectData);
+            }
         } else {
             $skipped = true;
         }

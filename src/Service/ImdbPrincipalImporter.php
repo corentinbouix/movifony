@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Movifony\Service;
 
+use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Persistence\ObjectManager;
 use Movifony\DTO\DtoInterface;
@@ -13,6 +14,7 @@ use Movifony\Entity\ImdbMovie;
 use Movifony\Entity\ImdbPerson;
 use Movifony\Factory\ImbdFactory;
 use Movifony\Repository\PersonRepository;
+use RuntimeException;
 
 /**
  * Class ImdbPrincipalImporter
@@ -23,12 +25,16 @@ class ImdbPrincipalImporter implements ImporterInterface
 {
     protected ManagerRegistry $managerRegistry;
 
+    protected PersonRepository $personRepository;
+
     /**
-     * @param ManagerRegistry $managerRegistry
+     * @param ManagerRegistry  $managerRegistry
+     * @param PersonRepository $personRepository
      */
-    public function __construct(ManagerRegistry $managerRegistry)
+    public function __construct(ManagerRegistry $managerRegistry, PersonRepository $personRepository)
     {
         $this->managerRegistry = $managerRegistry;
+        $this->personRepository = $personRepository;
     }
 
     /**
@@ -41,9 +47,7 @@ class ImdbPrincipalImporter implements ImporterInterface
             return null;
         }
 
-        /** @var PersonRepository $personRepository */
-        $personRepository = $this->managerRegistry->getRepository(ImdbPerson::class);
-        $existingPerson = $personRepository->findByIdentifier($personIdentifier);
+        $existingPerson = $this->getExistingPerson($personIdentifier);
 
         return new PersonDto($data['nconst'], $data['tconst'], $existingPerson === null);
     }
@@ -51,9 +55,26 @@ class ImdbPrincipalImporter implements ImporterInterface
     /**
      * @inheritDoc
      */
-    public function process(DtoInterface $data): ImdbPerson
+    public function process(DtoInterface $data): ?ImdbPerson
     {
-        return ImbdFactory::createPerson($data);
+        /** @var PersonDto $data */
+        $movie = $this->isMatchingMovie($data->getMovieIdentifier());
+        if (!$movie) {
+            throw new RuntimeException("Can't find back matching movie, reader process find it but not anymore");
+        }
+
+        $existingPerson = $this->getExistingPerson($data->getIdentifier());
+
+        if (!$existingPerson) {
+            $existingPerson = ImbdFactory::createPerson($data, $movie);
+        }
+
+        $moviePersons = $movie->getPersons();
+        if ($moviePersons->contains($existingPerson)) {
+            return null;
+        }
+
+        return $existingPerson;
     }
 
     /**
@@ -66,7 +87,10 @@ class ImdbPrincipalImporter implements ImporterInterface
             return false;
         }
 
-        $om->persist($data);
+        /** @var ImdbPerson $data */
+        if ($data->isPersistenceRequired()) {
+            $om->persist($data);
+        }
         $om->flush();
 
         return true;
@@ -86,15 +110,24 @@ class ImdbPrincipalImporter implements ImporterInterface
     }
 
     /**
-     * @param $movieIdentifier
+     * @param string $movieIdentifier
      *
-     * @return bool
+     * @return ImdbMovie|null
      */
-    protected function isMatchingMovie(string $movieIdentifier): bool
+    protected function isMatchingMovie(string $movieIdentifier): ?ImdbMovie
     {
         $repository = $this->managerRegistry->getRepository(ImdbMovie::class);
-        $movie = $repository->findByIdentifier($movieIdentifier);
 
-        return $movie !== null;
+        return $repository->findByIdentifier($movieIdentifier);
+    }
+
+    /**
+     * @param string $personIdentifier
+     *
+     * @return ImdbPerson|null
+     */
+    protected function getExistingPerson(string $personIdentifier): ?ImdbPerson
+    {
+        return $this->personRepository->findByIdentifier($personIdentifier);
     }
 }

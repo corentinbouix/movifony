@@ -22,9 +22,9 @@ interface ImporterInterface
     /**
      * @param $data
      *
-     * @return BusinessObjectInterface
+     * @return BusinessObjectInterface|null
      */
-    public function process(DtoInterface $data): BusinessObjectInterface;
+    public function process(DtoInterface $data): ?BusinessObjectInterface;
 
     /**
      * @param $data

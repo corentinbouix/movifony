@@ -39,6 +39,9 @@ class ImdbPerson implements BusinessObjectInterface
      */
     protected Collection $movies;
 
+    /** @var bool */
+    protected bool $needPersist = false;
+
     public function __construct()
     {
         $this->movies = new ArrayCollection();
@@ -99,5 +102,18 @@ class ImdbPerson implements BusinessObjectInterface
     public function removeMovie(ImdbMovie $movie): void
     {
         $this->movies->removeElement($movie);
+    }
+
+    public function needToBePersisted(): void
+    {
+        $this->needPersist = true;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPersistenceRequired(): bool
+    {
+        return $this->needPersist;
     }
 }

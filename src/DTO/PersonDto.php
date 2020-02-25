@@ -44,4 +44,14 @@ class PersonDto implements DtoInterface
     {
         return $this->movieIdentifier;
     }
+
+    /**
+     * Tell us whether it's already existing or not into DB
+     *
+     * @return bool
+     */
+    public function needPersist(): bool
+    {
+        return $this->needPersist;
+    }
 }

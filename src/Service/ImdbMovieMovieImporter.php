@@ -59,7 +59,7 @@ class ImdbMovieMovieImporter implements ImporterInterface
     /**
      * @inheritDoc
      */
-    public function process(DtoInterface $data): ImdbMovie
+    public function process(DtoInterface $data): ?ImdbMovie
     {
         $movie = ImbdFactory::createMovie($data);
 
