@@ -9,3 +9,7 @@ mf_last_movies:
         limit: 10
     requirements:
         limit: '\d+'
+
+mf_movie:
+    path: /movie/{identifier}
+    controller: Movifony\Action\MovieAction

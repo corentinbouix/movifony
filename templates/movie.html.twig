@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ movie.title }}{% endblock %}
+
+{% block body %}
+    <div class="jumbotron">
+        <div class="row">
+            <div class="col-3">
+                <img src="{{ movie.posterUrl ? movie.posterUrl : 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=750&q=80' }}"
+                     class="" alt="{{ movie.title }}">
+            </div>
+            <div class="col-9">
+                <h1 class="display-4">{{ movie.title }}</h1>
+                <p class="lead">
+                <ul>
+                    {% for person in movie.persons %}
+                        <li>
+                            <span class="badge badge-secondary">{{ person.identifier }}</span>
+                        </li>
+                    {% endfor %}
+                </ul>
+                </p>
+                <p>IMDB Identifier {{ movie.identifier }}</p>
+                <a class="btn btn-primary btn-lg" href="{{ 'https://www.imdb.com/title/' ~ movie.identifier }}" role="button">
+                    Learn more on IMDB
+                </a>
+            </div>
+        </div>
+        <hr class="my-4">
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus aliquam aspernatur beatae cumque deserunt eos harum inventore magnam modi natus non, officia possimus quis repellendus, sunt unde vero? Autem, commodi.</p>
+    </div>
+{% endblock %}
