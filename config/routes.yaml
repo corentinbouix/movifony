@@ -27,3 +27,4 @@ mf_api_latest_movie:
 mf_api_movie_identifier:
     path: /api/movie/{identifier}
     controller: Movifony\Api\MovieAction
+

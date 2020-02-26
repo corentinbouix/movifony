@@ -1,6 +1,29 @@
 # Movifony
 
-Import title.akas.tsv to `./data`
+## Getting started
+
+Import `title.akas.tsv` and `title.principals.tsv to `./data`
+
+You can find those files at: [https://www.imdb.com/interfaces/](https://www.imdb.com/interfaces/)
+
+`docker-compose up -d`
+
+Run inside the PHP container in this order:
+
+```
+composer install // install dependacies
+php bin/console doctrine:database:create // create databse
+php bin/console doctrine:schema:create // create DB schema
+php bin/console movifony:import:movie:imdb // import movies
+php bin/console movifony:import:principal:imdb // import person that are link with the DB movies
+```
+
+Everything is now setup! You can go to `http://localhost`
+
+## API documentation
+
+Swagger doc for the API: [http://localhost/api/doc](http://localhost/api/doc)
+
 
 ------
 

@@ -7,7 +7,9 @@
     "ext-iconv": "*",
     "ext-json": "*",
     "league/csv": "^9.5",
+    "nelmio/api-doc-bundle": "^3.5",
     "sensio/framework-extra-bundle": "^5.5",
+    "symfony/asset": "4.4.*",
     "symfony/console": "4.4.*",
     "symfony/css-selector": "4.4.*",
     "symfony/dom-crawler": "4.4.*",
@@ -20,6 +22,7 @@
     "symfony/orm-pack": "^1.0",
     "symfony/security": "4.4.*",
     "symfony/security-csrf": "4.4.*",
+    "symfony/twig-pack": "^1.0",
     "symfony/yaml": "4.4.*"
   },
   "require-dev": {
