@@ -81,8 +81,6 @@ class ImdbMovieMovieImporter implements ImporterInterface
         $om->persist($data);
         $om->flush();
 
-        $this->importAsset($data);
-
         return true;
     }
 
