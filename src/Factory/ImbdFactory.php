@@ -41,6 +41,7 @@ class ImbdFactory
         $person = new ImdbPerson();
         $person->setIdentifier($personDto->getIdentifier());
         $person->addMovie($movie);
+        $person->setCategory($personDto->getCategory());
         $person->needToBePersisted();
 
         return $person;

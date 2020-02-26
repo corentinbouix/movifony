@@ -33,6 +33,13 @@ class ImdbPerson implements BusinessObjectInterface
     protected string $identifier;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="category", type="string")
+     */
+    protected string $category;
+
+    /**
      * @var Collection|ArrayCollection|ImdbMovie[]
      *
      * @ORM\ManyToMany(targetEntity="Movifony\Entity\ImdbMovie", inversedBy="persons")
@@ -69,6 +76,22 @@ class ImdbPerson implements BusinessObjectInterface
     public function setIdentifier(string $identifier): void
     {
         $this->identifier = $identifier;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCategory(): string
+    {
+        return $this->category;
+    }
+
+    /**
+     * @param string $category
+     */
+    public function setCategory(string $category): void
+    {
+        $this->category = $category;
     }
 
     /**

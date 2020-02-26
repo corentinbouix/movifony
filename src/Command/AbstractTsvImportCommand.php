@@ -78,9 +78,9 @@ abstract class AbstractTsvImportCommand extends Command
 
                 // DEV HERE: With this hack we import only recent movies
                 // This solution is better with performances than changing the pointer inside the file
-                if ($progressBar->getProgress() > 15000000) {
+//                if ($progressBar->getProgress() > 15000000) {
                     $this->import($records->current());
-                }
+//                }
 
                 $records->next();
                 $progressBar->advance();

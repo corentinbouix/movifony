@@ -11,21 +11,22 @@ namespace Movifony\DTO;
  */
 class PersonDto implements DtoInterface
 {
-    protected string $identifier;
-
-    protected string $movieIdentifier;
-
-    protected bool $needPersist;
+    private string $identifier;
+    private string $movieIdentifier;
+    private string $category;
+    private bool $needPersist;
 
     /**
      * @param string $identifier
      * @param string $movieIdentifier
+     * @param string $category
      * @param bool   $needPersist
      */
-    public function __construct(string $identifier, string $movieIdentifier, bool $needPersist)
+    public function __construct(string $identifier, string $movieIdentifier, string $category, bool $needPersist)
     {
         $this->identifier = $identifier;
         $this->movieIdentifier = $movieIdentifier;
+        $this->category = $category;
         $this->needPersist = $needPersist;
     }
 
@@ -43,6 +44,14 @@ class PersonDto implements DtoInterface
     public function getMovieIdentifier(): string
     {
         return $this->movieIdentifier;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCategory(): string
+    {
+        return $this->category;
     }
 
     /**

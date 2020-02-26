@@ -49,7 +49,7 @@ class ImdbPrincipalImporter implements ImporterInterface
 
         $existingPerson = $this->getExistingPerson($personIdentifier);
 
-        return new PersonDto($data['nconst'], $data['tconst'], $existingPerson === null);
+        return new PersonDto($data['nconst'], $data['tconst'], $data['category'], $existingPerson === null);
     }
 
     /**
