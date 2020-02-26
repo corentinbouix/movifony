@@ -17,3 +17,13 @@ mf_add_movie:
 mf_movie:
     path: /movie/{identifier}
     controller: Movifony\Action\MovieAction
+
+mf_api_latest_movie:
+    path: /api/latest-movies/{limit}
+    controller: Movifony\Api\LastMovieAction
+    defaults:
+        limit: 10
+
+mf_api_movie_identifier:
+    path: /api/movie/{identifier}
+    controller: Movifony\Api\MovieAction
