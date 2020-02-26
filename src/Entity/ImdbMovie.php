@@ -25,28 +25,28 @@ class ImdbMovie implements MovieInterface
      * @ORM\Column(name="id", type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    protected int $id;
+    protected ?int $id;
 
     /**
      * @var string
      *
      * @ORM\Column(name="identifier", type="string")
      */
-    protected string $identifier;
+    protected ?string $identifier = null;
 
     /**
      * @var string
      *
      * @ORM\Column(name="title", type="string")
      */
-    protected string $title;
+    protected ?string $title = null;
 
     /**
      * @var string|null
      *
      * @ORM\Column(name="poster_url", type="string", nullable=true)
      */
-    protected ?string $posterUrl;
+    protected ?string $posterUrl = null;
 
     /**
      * @var Collection|ArrayCollection|ImdbPerson[]
@@ -64,7 +64,7 @@ class ImdbMovie implements MovieInterface
     /**
      * @return int
      */
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -72,7 +72,7 @@ class ImdbMovie implements MovieInterface
     /**
      * @return string
      */
-    public function getIdentifier(): string
+    public function getIdentifier(): ?string
     {
         return $this->identifier;
     }
@@ -88,7 +88,7 @@ class ImdbMovie implements MovieInterface
     /**
      * @return string
      */
-    public function getTitle(): string
+    public function getTitle(): ?string
     {
         return $this->title;
     }
@@ -104,7 +104,7 @@ class ImdbMovie implements MovieInterface
     /**
      * @return string
      */
-    public function getPosterUrl(): string
+    public function getPosterUrl(): ?string
     {
         return $this->posterUrl;
     }

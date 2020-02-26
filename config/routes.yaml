@@ -3,12 +3,16 @@
 #    controller: App\Controller\DefaultController::index
 
 mf_last_movies:
-    path: /last-movies/{limit}
+    path: /{limit}
     controller: Movifony\Action\LastMovieAction
     defaults:
         limit: 10
     requirements:
         limit: '\d+'
+
+mf_add_movie:
+    path: /movie/add
+    controller: Movifony\Action\AddMovieAction
 
 mf_movie:
     path: /movie/{identifier}
