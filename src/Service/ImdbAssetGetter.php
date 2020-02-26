@@ -41,27 +41,35 @@ class ImdbAssetGetter implements AssetGetterInterface
     {
         $pageContent = $this->getPageContent($identifier);
 
+        if ($pageContent === null) {
+            return null;
+        }
+
         return $this->getPosterUrl($pageContent);
     }
 
     /**
      * @param string $identifier
      *
-     * @return string
+     * @return string|null
      *
-     * @throws RedirectionExceptionInterface
-     * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
-     * @throws ClientExceptionInterface
      */
-    protected function getPageContent(string $identifier): string
+    protected function getPageContent(string $identifier): ?string
     {
-        $content = $this->httpClient->request(
+        $response = $this->httpClient->request(
             Request::METHOD_GET,
             $this->getPageUrlFor([$identifier])
         );
 
-        return $content->getContent();
+        try {
+            return $response->getContent();
+        } catch (ClientExceptionInterface |
+        RedirectionExceptionInterface |
+        ServerExceptionInterface |
+        TransportExceptionInterface $e) {
+            return null;
+        }
     }
 
     /**

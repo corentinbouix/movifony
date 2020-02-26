@@ -74,9 +74,13 @@ abstract class AbstractTsvImportCommand extends Command
         $records->rewind();
 
         while ($records->valid()) {
-
             for ($i = 0; $i < $this->batchSize; $i++) {
-                $this->import($records->current());
+
+                // DEV HERE: With this hack we import only recent movies
+                // This solution is better with performances than changing the pointer inside the file
+                if ($progressBar->getProgress() > 15000000) {
+                    $this->import($records->current());
+                }
 
                 $records->next();
                 $progressBar->advance();
@@ -95,7 +99,7 @@ abstract class AbstractTsvImportCommand extends Command
         $dtoData = $this->importer->read($data);
         if ($dtoData !== null) {
             $objectData = $this->importer->process($dtoData);
-            if ($objectData === null ) {
+            if ($objectData === null) {
                 $skipped = true;
             } else {
                 $skipped = !$this->importer->write($objectData);

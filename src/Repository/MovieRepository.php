@@ -24,13 +24,16 @@ class MovieRepository extends ServiceEntityRepository
     }
 
     /**
+     * Find latest movies with available URL asset posters
+     *
      * @param int $limit
      *
      * @return array|ImdbMovie[]
      */
     public function findLatestMovies(int $limit): array
     {
-        $qb = $this->createQueryBuilder('m')
+        $qb = $this->createQueryBuilder('m');
+        $qb->where($qb->expr()->isNotNull('m.posterUrl'))
             ->setMaxResults($limit)
             ->orderBy('m.id', 'DESC');
 
